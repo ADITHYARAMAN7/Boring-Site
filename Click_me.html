@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clickin' Madness</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clicker Madness</title>
   <style>
     :root {
       --bg-color: #ffffff;
@@ -27,6 +27,7 @@
       font-family: 'Comic Sans MS', cursive, sans-serif;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       transition: all 0.3s ease;
@@ -41,11 +42,24 @@
       border-radius: 12px;
       cursor: pointer;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s;
+      transition: transform 0.1s ease;
+      position: relative;
     }
 
-    #click-btn:hover {
-      transform: scale(1.1);
+    #click-btn.clicked {
+      animation: pop 0.2s ease;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
     }
 
     #toggle-mode {
@@ -64,19 +78,42 @@
     #toggle-mode:hover {
       opacity: 0.8;
     }
+
+    #counter {
+      margin-top: 40px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-color);
+      transition: color 0.3s;
+    }
   </style>
 </head>
 <body>
   <button id="click-btn">Click Me 😎</button>
   <button id="toggle-mode">🌙 Dark Mode</button>
+  <div id="counter">Clicks: 0 🚀</div>
 
   <script>
     const toggleBtn = document.getElementById("toggle-mode");
     const body = document.body;
+    const clickBtn = document.getElementById("click-btn");
+    const counterDisplay = document.getElementById("counter");
+
+    let clickCount = 0;
 
     toggleBtn.addEventListener("click", () => {
       body.classList.toggle("dark-mode");
       toggleBtn.textContent = body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+    });
+
+    clickBtn.addEventListener("click", () => {
+      clickCount++;
+      counterDisplay.textContent = `Clicks: ${clickCount} 🚀`;
+      
+      clickBtn.classList.add("clicked");
+      setTimeout(() => {
+        clickBtn.classList.remove("clicked");
+      }, 200);
     });
   </script>
 </body>
