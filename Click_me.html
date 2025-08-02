@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clicker Madness</title>
+  <title>Clicker Supreme</title>
   <style>
     :root {
       --bg-color: #ffffff;
@@ -31,6 +31,7 @@
       justify-content: center;
       align-items: center;
       transition: all 0.3s ease;
+      position: relative;
     }
 
     #click-btn {
@@ -51,15 +52,9 @@
     }
 
     @keyframes pop {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.2);
-      }
-      100% {
-        transform: scale(1);
-      }
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
     }
 
     #toggle-mode {
@@ -75,16 +70,43 @@
       font-size: 1rem;
     }
 
-    #toggle-mode:hover {
-      opacity: 0.8;
-    }
-
     #counter {
       margin-top: 40px;
       font-size: 1.5rem;
       font-weight: bold;
       color: var(--text-color);
       transition: color 0.3s;
+    }
+
+    #shop {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    .shop-item {
+      margin-bottom: 10px;
+    }
+
+    .shop-item button {
+      margin-top: 5px;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #2ecc71;
+      color: white;
+      cursor: pointer;
+    }
+
+    .shop-item button:disabled {
+      background-color: gray;
+      cursor: not-allowed;
     }
   </style>
 </head>
@@ -93,13 +115,36 @@
   <button id="toggle-mode">🌙 Dark Mode</button>
   <div id="counter">Clicks: 0 🚀</div>
 
+  <div id="shop">
+    <div class="shop-item">
+      <strong>🔊 Click Sound</strong><br>
+      <em>Cost: 20 clicks</em><br>
+      <button id="buy-sound" disabled>Buy</button>
+    </div>
+    <div class="shop-item">
+      <strong>✌️ 2x Multiplier</strong><br>
+      <em>Cost: 50 clicks</em><br>
+      <button id="buy-multiplier" disabled>Buy</button>
+    </div>
+  </div>
+
+  <!-- Optional sound -->
+  <audio id="click-sound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
   <script>
-    const toggleBtn = document.getElementById("toggle-mode");
     const body = document.body;
+    const toggleBtn = document.getElementById("toggle-mode");
     const clickBtn = document.getElementById("click-btn");
     const counterDisplay = document.getElementById("counter");
 
+    const buySoundBtn = document.getElementById("buy-sound");
+    const buyMultiplierBtn = document.getElementById("buy-multiplier");
+    const clickSound = document.getElementById("click-sound");
+
     let clickCount = 0;
+    let multiplier = 1;
+    let soundUnlocked = false;
+    let multiplierUnlocked = false;
 
     toggleBtn.addEventListener("click", () => {
       body.classList.toggle("dark-mode");
@@ -107,13 +152,44 @@
     });
 
     clickBtn.addEventListener("click", () => {
-      clickCount++;
+      clickCount += multiplier;
       counterDisplay.textContent = `Clicks: ${clickCount} 🚀`;
-      
+
+      if (soundUnlocked) clickSound.play();
+
       clickBtn.classList.add("clicked");
       setTimeout(() => {
         clickBtn.classList.remove("clicked");
       }, 200);
+
+      // Unlock shop items based on count
+      if (clickCount >= 20 && !soundUnlocked) {
+        buySoundBtn.disabled = false;
+      }
+      if (clickCount >= 50 && !multiplierUnlocked) {
+        buyMultiplierBtn.disabled = false;
+      }
+    });
+
+    buySoundBtn.addEventListener("click", () => {
+      if (clickCount >= 20) {
+        clickCount -= 20;
+        soundUnlocked = true;
+        buySoundBtn.disabled = true;
+        counterDisplay.textContent = `Clicks: ${clickCount} 🚀`;
+        alert("🔊 Sound unlocked! Now every click goes beep!");
+      }
+    });
+
+    buyMultiplierBtn.addEventListener("click", () => {
+      if (clickCount >= 50) {
+        clickCount -= 50;
+        multiplier = 2;
+        multiplierUnlocked = true;
+        buyMultiplierBtn.disabled = true;
+        counterDisplay.textContent = `Clicks: ${clickCount} 🚀`;
+        alert("✌️ Multiplier unlocked! Every click = 2 now!");
+      }
     });
   </script>
 </body>
