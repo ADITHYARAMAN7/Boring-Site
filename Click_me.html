@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clickin' Madness</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+      --btn-bg: #f0f0f0;
+      --btn-text: #000000;
+    }
+
+    body.dark-mode {
+      --bg-color: #1e1e1e;
+      --text-color: #ffffff;
+      --btn-bg: #333333;
+      --btn-text: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    #click-btn {
+      padding: 1rem 2rem;
+      font-size: 2rem;
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+    }
+
+    #click-btn:hover {
+      transform: scale(1.1);
+    }
+
+    #toggle-mode {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 0.5rem 1rem;
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    #toggle-mode:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <button id="click-btn">Click Me 😎</button>
+  <button id="toggle-mode">🌙 Dark Mode</button>
+
+  <script>
+    const toggleBtn = document.getElementById("toggle-mode");
+    const body = document.body;
+
+    toggleBtn.addEventListener("click", () => {
+      body.classList.toggle("dark-mode");
+      toggleBtn.textContent = body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+    });
+  </script>
+</body>
+</html>
